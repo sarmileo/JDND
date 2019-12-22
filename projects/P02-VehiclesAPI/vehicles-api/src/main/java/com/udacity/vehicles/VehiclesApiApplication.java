@@ -1,5 +1,7 @@
 package com.udacity.vehicles;
 
+import com.udacity.vehicles.api.Maps;
+import com.udacity.vehicles.api.Pricing;
 import com.udacity.vehicles.domain.manufacturer.Manufacturer;
 import com.udacity.vehicles.domain.manufacturer.ManufacturerRepository;
 import org.modelmapper.ModelMapper;
@@ -51,6 +53,7 @@ public class VehiclesApiApplication {
      * @return created maps endpoint
      */
     @Bean(name="maps")
+    @Maps
     public WebClient webClientMaps(@Value("${maps.endpoint}") String endpoint) {
         return WebClient.create(endpoint);
     }
@@ -61,6 +64,7 @@ public class VehiclesApiApplication {
      * @return created pricing endpoint
      */
     @Bean(name="pricing")
+    @Pricing
     public WebClient webClientPricing(@Value("${pricing.endpoint}") String endpoint) {
         return WebClient.create(endpoint);
     }
