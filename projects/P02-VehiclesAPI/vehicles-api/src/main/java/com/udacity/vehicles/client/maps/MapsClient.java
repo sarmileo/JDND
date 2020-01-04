@@ -1,5 +1,6 @@
 package com.udacity.vehicles.client.maps;
 
+import com.udacity.vehicles.api.Maps;
 import com.udacity.vehicles.domain.Location;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -20,7 +21,7 @@ public class MapsClient {
     private final WebClient client;
     private final ModelMapper mapper;
 
-    public MapsClient(WebClient maps,
+    public MapsClient(@Maps WebClient maps,
             ModelMapper mapper) {
         this.client = maps;
         this.mapper = mapper;

@@ -1,5 +1,6 @@
 package com.udacity.vehicles.client.prices;
 
+import com.udacity.vehicles.api.Pricing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,7 @@ public class PriceClient {
 
     private final WebClient client;
 
-    public PriceClient(WebClient pricing) {
+    public PriceClient(@Pricing WebClient pricing) {
         this.client = pricing;
     }
 
