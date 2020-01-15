@@ -146,13 +146,6 @@ public class CarControllerTest {
         car.setId(1L);
 
         mvc.perform(
-                post(new URI("/cars"))
-                        .content(json.write(car).getJson())
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .accept(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(status().isCreated());
-
-        mvc.perform(
                 delete("/cars/{id}", car.getId()))
                 .andExpect(status().isNoContent());
 

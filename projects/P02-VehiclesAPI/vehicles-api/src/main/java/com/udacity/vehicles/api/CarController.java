@@ -2,6 +2,7 @@ package com.udacity.vehicles.api;
 
 
 import com.udacity.vehicles.domain.car.Car;
+import com.udacity.vehicles.service.CarNotFoundException;
 import com.udacity.vehicles.service.CarService;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
@@ -114,7 +115,14 @@ class CarController {
         /**
          * [DONE] TODO: Use the Car Service to delete the requested vehicle.
          */
-        carService.delete(id);
+        try {
+            carService.delete(id);
+        } catch (CarNotFoundException ex) {
+
+                   return ResponseEntity.notFound().build();
+        }
+
+        //carService.delete(id);
 
         return ResponseEntity.noContent().build();
     }
