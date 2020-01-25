@@ -131,6 +131,26 @@ public class CarControllerTest {
     }
 
     /**
+     * Tests the update operation for a single car by ID.
+     * @throws Exception if the update operation for a single car fails
+     */
+    @Test
+    public void updateCar() throws Exception {
+        /**
+         * [DONE]TODO: Add a test to check that the `put` method works by calling
+         *   a vehicle by ID. This should utilize the car from `getCar()` below.
+         */
+        Car car = getCar();
+        car.setId(1L);
+        mvc.perform(
+                put("/cars/{id}", car.getId() )
+                .content(json.write(car).getJson())
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk());
+    }
+
+    /**
      * Tests the deletion of a single car by ID.
      * @throws Exception if the delete operation of a vehicle fails
      */
