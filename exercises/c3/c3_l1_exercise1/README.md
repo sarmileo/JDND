@@ -2,7 +2,7 @@
 
 ### Exercise Instructions
 
-* Write the SQL to create the _member_ table in src/main/resources/db/migration/V01__CreateTable.sql.
+* Write the SQL to create the _member_ table in src/main/resources/db/migration/V02__CreateTable.sql.
 * Follow the steps in Application class.
 
 ### Reference Documentation
