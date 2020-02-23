@@ -1,8 +1,8 @@
 package com.udacity.jdnd.course3.lesson2.entity;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "author")
@@ -16,7 +16,21 @@ public class Author {
     private String name;
 
     @ManyToMany(mappedBy = "authors")
-    private List<Book> authors = new ArrayList<>();
+    private Set<Book> books = new HashSet<>();
+    //private List<Book> authors = new ArrayList<>();
+
+
+    public Author() {
+    }
+
+    public Author(String name) {
+        this.name = name;
+    }
+
+    public Author(String name, Set<Book> books) {
+        this.name = name;
+        this.books = books;
+    }
 
     public Integer getId() {
         return id;
@@ -34,11 +48,33 @@ public class Author {
         this.name = name;
     }
 
-    public List<Book> getAuthors() {
-        return authors;
+//    public List<Book> getBooks() {
+//        return authors;
+//    }
+    public Set<Book> getBooks() {
+        return books;
     }
 
-    public void setAuthors(List<Book> authors) {
-        this.authors = authors;
+//    public void setAuthors(List<Book> authors) {
+//        this.authors = authors;
+//    }
+    public void setBooks(Set<Book> books) {
+        this.books = books;
+    }
+
+    // utility method to manage association
+    public void addBook(Book book)
+    {
+        this.books.add(book);
+        book.getAuthors().add(this);
+    }
+
+    @Override
+    public String toString() {
+        return "Author{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                //", books=" + books +
+                '}';
     }
 }
