@@ -1,0 +1,11 @@
+-- INSERT INTO `orders` (`customer_name`, `customer_address`)
+-- VALUES ('Pedrito Perez', 'Saint Jhon Street 45, LA, 98654');
+--
+-- INSERT INTO `order_item`
+-- (`order_item_name`,
+-- `order_item_count`,
+-- `order_id`)
+-- VALUES
+-- ('ball',
+-- 3,
+-- 1);
