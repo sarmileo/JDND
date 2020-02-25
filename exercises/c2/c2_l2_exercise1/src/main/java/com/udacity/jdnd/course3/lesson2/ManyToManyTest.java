@@ -30,29 +30,29 @@ public class ManyToManyTest {
 
         // STEP 4: Create books (entity is in Transient state)
         Book book1 = new Book();
-        book1.setTitle("El Marti que yo conoci");
+        book1.setTitle("Looking for you");
         book1.setIsbn("book1isbn");
 
         Book book2 = new Book();
-        book2.setTitle("Mentes Rapidas");
+        book2.setTitle("In the road");
         book2.setIsbn("book2isbn");
 
         // create author for book1
         Author book1Author1 = new Author();
-        book1Author1.setName("book1Julio");
+        book1Author1.setName("book1Jhon");
 
         book1.addAuthor(book1Author1);
 
         // create author for book2
         Author book2Author1 = new Author();
-        book2Author1.setName("book2Ramon");
+        book2Author1.setName("book2Clay");
 
         book2.addAuthor(book2Author1);
 
         Set<Author> book2Authors = new HashSet<>(Arrays.asList(
-                new Author("book2Pepe"),
-                new Author("book2Mario"),
-                new Author("book2Leo")
+                new Author("book2Susan"),
+                new Author("book2Mary"),
+                new Author("book2Tom")
         ));
         book2.addAuthors(book2Authors);
 
