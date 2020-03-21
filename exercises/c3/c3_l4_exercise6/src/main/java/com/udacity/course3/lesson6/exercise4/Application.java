@@ -84,8 +84,9 @@ public class Application {
         Map<String, List<String>> membersMap3 = new HashMap<>();
         membersMap3.put("gender", Arrays.asList("female"));
         String sortCriteria = "last_name";
-        int limit = 1;
-        findSortByKeyAndValue(clubMembers, membersMap3, sortCriteria, 1);
+        int limit = 3; // 0 : no limit
+        int order = 1; // -1 : descending, 1 : ascending
+        findSortByKeyAndValue(clubMembers, membersMap3, sortCriteria, limit, order);
 
         // IMPORTANT: Make sure to close the MongoClient at the end so your program exits.
         mongoClient.close();
@@ -148,18 +149,24 @@ public class Application {
     public static void findSortByKeyAndValue(MongoCollection<Document> collection,
                                              Map<String, List<String>> keyValueMap,
                                              String sortCriteria,
-                                             int limit)
+                                             int limit,
+                                             int order)
     {
-        System.out.println("\nCount by Key and Value: ");
+        System.out.println("\nFind and sort by Key and Value: ");
 
         /** One solution */
         keyValueMap.forEach((key, values) -> {
             values.forEach(value -> {
-                System.out.println("Finding by : " + key + ": " + value + ", and sorting by: " + sortCriteria);
+                System.out.println("Finding by : " +
+                                    " \n - " + key + "           : " + value +
+                                    ",\n - sorting by       : " + sortCriteria +
+                                    ",\n - sorting order    : " + ((order > 0) ? "ascending" : "descending") +
+                                    ",\n - limit results to : " + ((limit > 0) ? limit : "no limit") );
+                System.out.println();
                 Block<Document> printBlock = document -> System.out.println(document.toJson());
 
                 collection.find(eq(key, value))
-                            .sort(new Document(sortCriteria, 1))
+                            .sort(new Document(sortCriteria, order))
                             .limit(limit)
                             .forEach(printBlock);
             });
