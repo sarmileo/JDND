@@ -1,6 +1,5 @@
 package com.udacity.course3.lesson6.exercise4;
 
-import com.mongodb.Block;
 import com.mongodb.MongoCommandException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -8,13 +7,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static com.mongodb.client.model.Filters.and;
-import static com.mongodb.client.model.Filters.eq;
+import java.util.*;
 
 public class Application {
 
@@ -56,12 +49,19 @@ public class Application {
          * Perform all the steps listed in the exercise
          * **/
         /** 1.Find all members whose last_name is Khan and print the results. There should be one document in the results. */
+        // > db.clubMembers.find({last_name: 'Khan'})
         findByLastName(clubMembers, "Khan");
 
         /** 2.Find all members whose last_name is Doe and gender is female and print the results. There should be one document in the results. */
-        findByLastNameAndGender(clubMembers, "Doe", "female");
+        // find with logical operator
+        // > db.club_members.find({$and: [ {last_name: 'Doe'}, {gender: 'female'} ]})
+        List<Document> filters = new ArrayList<>();
+        filters.add(new Document("last_name", "Doe"));
+        filters.add(new Document("gender", "female"));
+        findByLastNameAndGender(clubMembers, filters);
 
         /** 3.Find all members who are interested in golf and print the results. There should be 2 documents in the results.*/
+        // > db.club_members.find({interests : 'golf'})
         Map<String, List<String>> membersMap = new HashMap<>();
         membersMap.put("interests", Arrays.asList("golf", "crossfit"));
         membersMap.put("last_name", Arrays.asList("Khan"));
@@ -69,18 +69,22 @@ public class Application {
         findByKeyAndValue(clubMembers, membersMap);
 
         /** 4.Find all members who live in MN and print the results. There should be 2 documents in the results. */
+        // > db.club_members.find({"address.state" : "MN"})
         Map<String, List<String>> membersMap1 = new HashMap<>();
         membersMap1.put("address.state", Arrays.asList("MN"));
 
         findByKeyAndValue(clubMembers, membersMap1);
 
         /** 5.Count the number of members who are male and print the results. Result: 3 */
+        // > db.club_members.countDocuments({"gender" : "male"})
         Map<String, List<String>> membersMap2 = new HashMap<>();
         membersMap2.put("gender", Arrays.asList("male"));
+        membersMap2.put("interests", Arrays.asList("golf"));
 
         countByKeyAndValue(clubMembers, membersMap2);
 
         /** 6.Find the first member who is a female sorted by their first_name and print the results. Result: Member’s first_name is Jane. */
+        // > db.club_members.find({"gender" : "female"}).sort({"first_name" : 1}).limit(1)
         Map<String, List<String>> membersMap3 = new HashMap<>();
         membersMap3.put("gender", Arrays.asList("female"));
         String sortCriteria = "last_name";
@@ -96,22 +100,19 @@ public class Application {
                                       String lastName)
     {
         System.out.println("Find by last name Khan: ");
-        Block<Document> printBlock = document -> System.out.println(document.toJson());
 
-        collection.find(eq("last_name", "Khan"))
-                .forEach(printBlock);
+        Document member = collection.find(new Document("last_name", "Khan")).first();
+
+        System.err.println(member.toJson());
     }
 
     public static void findByLastNameAndGender(MongoCollection<Document> collection,
-                                               String lastName,
-                                               String gender)
+                                               List<Document> filters)
     {
         System.out.println("\nFind by last name Doe and gender female: ");
-        Block<Document> printBlock = document -> System.out.println(document.toJson());
-
-        collection.find(and(eq("last_name", "Doe"),
-                            eq("gender", "female")))
-                .forEach(printBlock);
+        collection.find(new Document("$and", filters
+        )).iterator()
+                .forEachRemaining(System.err::println);
     }
 
     public static void findByKeyAndValue(MongoCollection<Document> collection,
@@ -123,10 +124,10 @@ public class Application {
         keyValueMap.forEach((key, values) -> {
             values.forEach(value -> {
                 System.out.println("Finding by : " + key + ": " + value);
-                Block<Document> printBlock = document -> System.out.println(document.toJson());
 
-                collection.find(eq(key, value))
-                        .forEach(printBlock);
+                collection.find(new Document(key, value))
+                        .iterator()
+                        .forEachRemaining(System.err::println);
             });
         });
     }
@@ -141,7 +142,8 @@ public class Application {
             values.forEach(value -> {
                 System.out.println("Counting by : " + key + ": " + value);
 
-                System.out.println("Result: " + collection.countDocuments(eq(key, value)));
+                System.err.println(collection.countDocuments(new Document(key, value)));
+
             });
         });
     }
@@ -163,12 +165,12 @@ public class Application {
                                     ",\n - sorting order    : " + ((order > 0) ? "ascending" : "descending") +
                                     ",\n - limit results to : " + ((limit > 0) ? limit : "no limit") );
                 System.out.println();
-                Block<Document> printBlock = document -> System.out.println(document.toJson());
 
-                collection.find(eq(key, value))
+                collection.find(new Document(key, value))
                             .sort(new Document(sortCriteria, order))
                             .limit(limit)
-                            .forEach(printBlock);
+                            .iterator()
+                        .forEachRemaining(System.err::println);
             });
         });
     }
