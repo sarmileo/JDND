@@ -1,31 +1,36 @@
 package com.udacity.course3.reviews.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name= "product")
-public class Product
-{
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private Set<Review> reviews;
-
+@Table(name = "product", schema = "reviews")
+public class Product {
     @Id
-    @Column(name= "productId")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long productId;
+    private Integer id;
 
-    @Column(name= "productName")
-    String productName;
+    @Column(name = "name")
+    private String name;
 
-    public Product()
-    {
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL) //see "product" in @ManyToOne in Review class
+    @JsonBackReference
+    private Set<Review> reviews = new HashSet<>();
+
+    public Product() {
     }
 
-    public Product(Set<Review> reviews, String productName)
-    {
+    public Product(String name) {
+        this.name = name;
+    }
+
+    public Product(Set<Review> reviews, String name) {
         this.reviews = reviews;
-        this.productName = productName;
+        this.name = name;
     }
 
     public Set<Review> getReviews() {
@@ -36,19 +41,28 @@ public class Product
         this.reviews = reviews;
     }
 
-    public Long getProductId() {
-        return productId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getName() {
+        return name;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", reviews=" + reviews +
+                '}';
     }
 }

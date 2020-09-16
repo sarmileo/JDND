@@ -1,29 +1,29 @@
 package com.udacity.course3.reviews.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 
 @Entity
-@Table(name = "comment")
-public class Comment
-{
-    @ManyToOne
-    @JoinColumn(name = "reviewId")
-    private Review review;
-
+@Table(name = "comment", schema = "reviews")
+public class Comment {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "content")
     private String content;
 
-    public Comment()
-    {
+    @ManyToOne
+    @JoinColumn(name = "review_id")
+    @JsonManagedReference
+    private Review review;
+
+    public Comment() {
     }
 
-    public Comment(Review review, String content, int reviewId)
-    {
+    public Comment(Review review, String content) {
         this.review = review;
         this.content = content;
     }
@@ -36,11 +36,11 @@ public class Comment
         this.review = review;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -52,4 +52,11 @@ public class Comment
         this.content = content;
     }
 
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", content='" + content +
+                '}';
+    }
 }

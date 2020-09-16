@@ -1,39 +1,48 @@
 package com.udacity.course3.reviews.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name= "review")
-public class Review
-{
-    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
-    private Set<Comment> comments;
-
-    @ManyToOne
-    @JoinColumn(name = "productId")
-    private Product product;
-
+@Table(name = "review", schema = "reviews")
+public class Review {
     @Id
-    @Column(name= "id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
-    @Column(name= "text")
-    private String text;
+    @Column(name = "content")
+    private String content;
 
-    @Column(name= "title")
+    @Column(name = "title")
     private String title;
 
-    public Review()
-    {
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    @JsonBackReference
+    private Set<Comment> comments = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    @JsonManagedReference
+    private Product product; // referred in @OneToMany in Product class
+
+    public Review() {
     }
 
-    public Review(Set<Comment> comments, Product product, String text, String title)
-    {
+    public Review(Product product, String content, String title) {
+        this.product = product;
+        this.content = content;
+        this.title = title;
+    }
+
+    public Review(Set<Comment> comments, Product product, String content, String title) {
         this.comments = comments;
         this.product = product;
-        this.text = text;
+        this.content = content;
         this.title = title;
     }
 
@@ -53,20 +62,20 @@ public class Review
         this.product = product;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getText() {
-        return text;
+    public String getContent() {
+        return content;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public String getTitle() {
@@ -75,5 +84,14 @@ public class Review
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    @Override
+    public String toString() {
+        return "Review{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", title='" + title + '\'' +
+                '}';
     }
 }
