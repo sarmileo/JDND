@@ -1,3 +1,5 @@
+-- Using H2 in memory database, SWITCH to 'schema.sql' and 'data.sql.bak' when done testing
+
 -- products
 INSERT INTO product (id, name) VALUES (1, 'book');
 INSERT INTO product (id, name) VALUES (2, 'computer');

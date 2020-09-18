@@ -1,0 +1,32 @@
+-- Create Database "reviews" and Tables product, review, comment
+-- Using H2 in memory database, SWITCH to 'schema.sql.bak' and 'data.sql.bak' when done testing
+
+CREATE SCHEMA IF NOT EXISTS `reviews`;
+
+DROP TABLE IF EXISTS comment;
+DROP TABLE IF EXISTS review;
+DROP TABLE IF EXISTS product;
+
+CREATE TABLE `product` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `review` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `content` varchar(100),
+  `title` varchar(50) DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `review_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
+);
+
+CREATE TABLE `comment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `content` varchar(100),
+  `review_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`review_id`) REFERENCES `review` (`id`)
+);
+

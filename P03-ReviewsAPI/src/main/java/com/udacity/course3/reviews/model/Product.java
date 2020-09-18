@@ -28,6 +28,11 @@ public class Product {
         this.name = name;
     }
 
+    public Product(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Product(Set<Review> reviews, String name) {
         this.reviews = reviews;
         this.name = name;
